@@ -13,3 +13,7 @@ spring:
 
   flyway:
     enabled: true
+
+jwt:
+  secret: ${JWT_SECRET:your-long-random-base64-secret-here}
+  expiration: 3600000
