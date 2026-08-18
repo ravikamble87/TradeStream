@@ -8,6 +8,11 @@ RUN mvn clean package -DskipTests -B
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
+
+RUN addgroup --system tradestream && adduser --system --ingroup tradestream tradestream
 COPY --from=build /app/target/*.jar app.jar
+RUN chown tradestream:tradestream app.jar
+USER tradestream
+
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

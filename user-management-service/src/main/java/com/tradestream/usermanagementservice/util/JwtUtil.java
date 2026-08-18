@@ -1,6 +1,7 @@
 package com.tradestream.usermanagementservice.util;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,8 +38,14 @@ public class JwtUtil {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
-        String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && isExpired(token);
+        try {
+            String username = extractUsername(token);
+            return username.equals(userDetails.getUsername()) && !isExpired(token);
+        } catch (ExpiredJwtException ex) {
+            // jjwt rejects an expired token while parsing, before we'd even get to
+            // check the expiry ourselves - treat that the same as "not valid".
+            return false;
+        }
     }
 
     private boolean isExpired(String token){

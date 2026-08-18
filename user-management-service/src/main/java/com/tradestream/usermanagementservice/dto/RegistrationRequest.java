@@ -1,9 +1,11 @@
 package com.tradestream.usermanagementservice.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record RegistrationRequest(
         @NotBlank String name,
-        @NotBlank String email,
-        @NotBlank String password)
+        @NotBlank @Email String email,
+        @NotBlank @Size(min = 8, message = "password must be at least 8 characters") String password)
 {}

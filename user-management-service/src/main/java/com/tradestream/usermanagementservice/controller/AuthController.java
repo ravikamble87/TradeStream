@@ -1,7 +1,9 @@
 package com.tradestream.usermanagementservice.controller;
 
+import com.tradestream.usermanagementservice.dto.AuthResponse;
 import com.tradestream.usermanagementservice.dto.LoginRequest;
 import com.tradestream.usermanagementservice.util.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,10 +24,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request){
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.username(), request.password()));
         String token = jwtUtil.generateToken(request.username());
-        return ResponseEntity.ok(Map.of("token", token).toString());
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }
