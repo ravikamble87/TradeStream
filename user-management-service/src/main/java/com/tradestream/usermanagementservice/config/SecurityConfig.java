@@ -1,6 +1,7 @@
 package com.tradestream.usermanagementservice.config;
 
 import com.tradestream.usermanagementservice.filters.JwtAuthFilter;
+import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,7 +44,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_PATHS).permitAll().anyRequest().authenticated())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore((Filter) jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
