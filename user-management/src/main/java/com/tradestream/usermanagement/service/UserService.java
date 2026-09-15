@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -30,6 +32,9 @@ public class UserService {
                 .username(registrationRequest.userName())
                 .email(registrationRequest.email())
                 .passwordHash(passwordEncoder.encode(registrationRequest.password()))
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .lastLoginAt(Instant.now())
                 .build();
 
         User savedUser = userRepository.save(user);
