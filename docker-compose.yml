@@ -35,11 +35,11 @@ services:
       timeout: 5s
       retries: 10
 
-  user-management-service:
+  user-management:
     build:
-      context: ./user-management-service
-      dockerfile: Dockerfile
-    container_name: user-management-service
+      context: .
+      dockerfile: user-management/Dockerfile
+    container_name: user-management
     depends_on:
       postgres:
         condition: service_healthy

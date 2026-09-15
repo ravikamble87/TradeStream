@@ -11,14 +11,14 @@
 
     <modules>
         <module>order-service</module>
-        <module>user-management-service</module>
+        <module>user-management</module>
         <!-- add matching-engine, market-data-service, settlement-service later -->
     </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>4.1.1</version>
         <relativePath/>
     </parent>
 
@@ -27,24 +27,16 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-kafka.version>3.2.4</spring-kafka.version>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.kafka</groupId>
-                <artifactId>spring-kafka</artifactId>
-                <version>${spring-kafka.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <optional>true</optional>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <!-- spring-kafka's version is left to spring-boot-starter-parent's own dependency
+         management, which picks the release compatible with this Spring Boot/Framework
+         line. Pinning it here (previously 3.2.4) forced a spring-kafka release built
+         against an older Spring Framework than 4.1.1 requires and risked runtime
+         NoSuchMethodError/version-mismatch failures. -->
 
+    <!-- Only truly shared-by-every-module dependencies belong here.
+         Module-specific things (web, security, JPA, JWT) go in each child's own pom. -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -54,6 +46,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 </project>
